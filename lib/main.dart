@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const MonAppli());
 }
@@ -47,7 +46,10 @@ class PageAccueil extends StatelessWidget {
             PartieTexte(),
             SizedBox(height: 10),
             PartieIcone(),
-            PartieRubrique()
+            PartieRubrique(),
+            // Bouton ajouté ici pour aller sur une autre page
+            SizedBox(height: 20),
+            BoutonNouvellePage(), 
           ],
         ),
       ),
@@ -131,30 +133,29 @@ class PartieIcone extends StatelessWidget {
         children: [
           Container(
             child: Column(
-               children: const[
-                Icon( Icons.phone,  color: Colors.red,),
-                SizedBox(height: 5,),
-                Text('TELEPHONE', style: TextStyle(color: Colors.red),)
-               ], 
-            ),
-          ),
-
-          Container(
-            child: Column(
-               children: const[
-                Icon( Icons.email,  color: Colors.red,),
-                SizedBox(height: 5,),
-                Text('E-MAIL', style: TextStyle(color: Colors.red),)
-               ], 
+              children: const [
+                Icon(Icons.phone, color: Colors.red),
+                SizedBox(height: 5),
+                Text('TELEPHONE', style: TextStyle(color: Colors.red)),
+              ],
             ),
           ),
           Container(
             child: Column(
-               children: const[
-                Icon( Icons.share, color: Colors.red,),
-                SizedBox(height: 5,),
-                Text('PARTAGE', style: TextStyle(color: Colors.red),)
-               ], 
+              children: const [
+                Icon(Icons.email, color: Colors.red),
+                SizedBox(height: 5),
+                Text('E-MAIL', style: TextStyle(color: Colors.red)),
+              ],
+            ),
+          ),
+          Container(
+            child: Column(
+              children: const [
+                Icon(Icons.share, color: Colors.red),
+                SizedBox(height: 5),
+                Text('PARTAGE', style: TextStyle(color: Colors.red)),
+              ],
             ),
           )
         ],
@@ -162,78 +163,116 @@ class PartieIcone extends StatelessWidget {
     );
   }
 }
-class PartieRubrique extends StatelessWidget{
+
+class PartieRubrique extends StatelessWidget {
   const PartieRubrique({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-       padding: const EdgeInsets.all(20),
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/images/etr.jpg',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            )),
+            Container(
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/images/jutr.jpg',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            )),
+            Container(
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/images/download.jpeg',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            )),
+            Container(
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/images/do.jpeg',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            )),
+          ],
+        ));
+  }
+}
 
-            child: 
-             ClipRRect(
-            borderRadius: BorderRadius.circular(12), 
-            child: Image.asset(
-              'assets/images/etr.jpg', // image à partir d’assets
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            )
-          ),
+///  Bouton pour naviguer vers une autre page
+class BoutonNouvellePage extends StatelessWidget {
+  const BoutonNouvellePage({super.key});
 
-          ),
-          Container(
-            
-            child: 
-             ClipRRect(
-            borderRadius: BorderRadius.circular(12), 
-            child: Image.asset(
-              'assets/images/jutr.jpg', // image à partir d’assets
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            )
-          ),
-
-          ),
-          Container(
-            
-            child: 
-             ClipRRect(
-            borderRadius: BorderRadius.circular(12), 
-            child: Image.asset(
-              'assets/images/download.jpeg', // image à partir d’assets
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            )
-          ),
-
-          ),
-           Container(
-            
-            child: 
-             ClipRRect(
-            borderRadius: BorderRadius.circular(12), 
-            child: Image.asset(
-              'assets/images/do.jpeg', // image à partir d’assets
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            )
-          ),
-
-          )
-        
-
-        ],
-       )
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PageSecondaire()),
+        );
+      },
+      child: const Text(
+        'Voir les redacteurs',
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
     );
   }
-
 }
- 
+
+// Nouvelle page secondaire
+class PageSecondaire extends StatelessWidget {
+  const PageSecondaire({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Bienvenue sur la page des rédacteurs!"),
+        backgroundColor: Colors.red,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // icône de retour
+          onPressed: () {
+            Navigator.pop(context); // retourne à la page précédente
+          },
+        ),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+        ],
+      ),
+      body: const Center(
+        child: Text(
+          "Contenu des rédacteurs ici",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
+}
+
+
