@@ -245,34 +245,95 @@ class BoutonNouvellePage extends StatelessWidget {
 }
 
 // Nouvelle page secondaire
-class PageSecondaire extends StatelessWidget {
+// Nouvelle page secondaire : formulaire pour ajouter un rédacteur
+class PageSecondaire extends StatefulWidget {
   const PageSecondaire({super.key});
+
+  @override
+  _PageSecondaireState createState() => _PageSecondaireState();
+}
+
+class _PageSecondaireState extends State<PageSecondaire> {
+  // Contrôleurs pour les champs de texte
+  final TextEditingController _nomController = TextEditingController();
+  final TextEditingController _prenomController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  // Méthode pour ajouter un rédacteur (pour l'instant juste un print)
+  void _ajouterRedacteur() {
+    final String nom = _nomController.text.trim();
+    final String prenom = _prenomController.text.trim();
+    final String email = _emailController.text.trim();
+
+    if (nom.isEmpty || prenom.isEmpty || email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Veuillez remplir tous les champs")),
+      );
+      return;
+    }
+
+    // Pour l'instant on affiche juste les valeurs dans la console
+    print("Rédacteur ajouté : $nom $prenom, $email");
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Rédacteur $nom $prenom ajouté !")),
+    );
+
+    // Réinitialiser les champs
+    _nomController.clear();
+    _prenomController.clear();
+    _emailController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Bienvenue sur la page des rédacteurs!"),
+        title: const Text("Ajouter un rédacteur"),
         backgroundColor: Colors.red,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // icône de retour
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // retourne à la page précédente
+            Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-        ],
       ),
-      body: const Center(
-        child: Text(
-          "Contenu des rédacteurs ici",
-          style: TextStyle(fontSize: 20),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nomController,
+              decoration: const InputDecoration(labelText: 'Nom'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _prenomController,
+              decoration: const InputDecoration(labelText: 'Prénom'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'E-mail'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _ajouterRedacteur,
+              icon: const Icon(Icons.add),
+              label: const Text("Ajouter le rédacteur"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
 
 
