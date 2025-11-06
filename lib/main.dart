@@ -244,7 +244,6 @@ class BoutonNouvellePage extends StatelessWidget {
   }
 }
 
-// Nouvelle page secondaire
 // Nouvelle page secondaire : formulaire pour ajouter un rédacteur
 class PageSecondaire extends StatefulWidget {
   const PageSecondaire({super.key});
@@ -258,14 +257,17 @@ class _PageSecondaireState extends State<PageSecondaire> {
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _domicileController = TextEditingController();
 
   // Méthode pour ajouter un rédacteur (pour l'instant juste un print)
   void _ajouterRedacteur() {
     final String nom = _nomController.text.trim();
     final String prenom = _prenomController.text.trim();
     final String email = _emailController.text.trim();
+    final String domicile = _domicileController.text.trim();
 
-    if (nom.isEmpty || prenom.isEmpty || email.isEmpty) {
+
+    if (nom.isEmpty || prenom.isEmpty || email.isEmpty ||domicile.isEmpty ) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Veuillez remplir tous les champs")),
       );
@@ -316,6 +318,11 @@ class _PageSecondaireState extends State<PageSecondaire> {
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'E-mail'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _prenomController,
+              decoration: const InputDecoration(labelText: 'Domicile'),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(
