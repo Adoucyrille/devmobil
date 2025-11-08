@@ -1,29 +1,54 @@
+// lib/modele/redacteur.dart
+
 class Redacteur {
-  int? id;
+  // Attributs de la classe
+  int? id; // Clé primaire avec auto-incrémentation
   String nom;
   String prenom;
   String email;
+  String domicile;
 
-  Redacteur({this.id, required this.nom, required this.prenom, required this.email});
+  // Constructeur avec tous les attributs
+  Redacteur({
+    this.id,
+    required this.nom,
+    required this.prenom,
+    required this.email,
+    required this.domicile,
+  });
 
-  // Convertir en Map pour SQLite
+  // Constructeur sans l'attribut id (pour l'insertion)
+  Redacteur.sansId({
+    required this.nom,
+    required this.prenom,
+    required this.email,
+    required this.domicile,
+  }) : id = null;
+
+  // Méthode pour convertir un objet Redacteur en Map
   Map<String, dynamic> toMap() {
-    final map = <String, dynamic>{
+    return {
+      if (id != null) 'id': id,
       'nom': nom,
       'prenom': prenom,
       'email': email,
+      'domicile': domicile,
     };
-    if (id != null) map['id'] = id;
-    return map;
   }
 
-  // Convertir Map en Redacteur
+  // Méthode pour créer un objet Redacteur à partir d'un Map
   factory Redacteur.fromMap(Map<String, dynamic> map) {
     return Redacteur(
       id: map['id'],
       nom: map['nom'],
       prenom: map['prenom'],
       email: map['email'],
+      domicile: map['domicile'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'Redacteur{id: $id, nom: $nom, prenom: $prenom, email: $email, domicile: $domicile}';
   }
 }

@@ -1,12 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../modele/redacteur.dart';
+import 'Redacteur.dart';
 
-class DatabaseAdou {
-  static final DatabaseAdou instance = DatabaseAdou._init();
+class DatabaseADOU {
+  static final DatabaseADOU instance = DatabaseADOU._init();
   static Database? _database;
 
-  DatabaseAdou._init();
+  DatabaseADOU._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -18,7 +18,11 @@ class DatabaseAdou {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDB,
+    );
   }
 
   Future _createDB(Database db, int version) async {
@@ -27,22 +31,39 @@ class DatabaseAdou {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
         prenom TEXT NOT NULL,
-        email TEXT NOT NULL
+        email TEXT NOT NULL,
+        domicile TEXT NOT NULL
       )
     ''');
   }
 
-  Future<List<Redacteur>> getAllRedacteurs() async {
-    final db = await instance.database;
-    final result = await db.query('redacteurs');
-    return result.map((map) => Redacteur.fromMap(map)).toList();
-  }
+  // -------------------- CRUD METHODS --------------------
 
+  // CREATE
   Future<int> insertRedacteur(Redacteur redacteur) async {
     final db = await instance.database;
     return await db.insert('redacteurs', redacteur.toMap());
   }
 
+  // Lire
+  Future<List<Redacteur>> getAllRedacteurs() async {
+    final db = await instance.database;
+    final result = await db.query('redacteurs', orderBy: 'id DESC');
+    return result.map((json) => Redacteur.fromMap(json)).toList();
+  }
+
+  // Lire ONE
+  Future<Redacteur?> getRedacteur(int id) async {
+    final db = await instance.database;
+    final result = await db.query('redacteurs', where: 'id = ?', whereArgs: [id]);
+    if (result.isNotEmpty) {
+      return Redacteur.fromMap(result.first);
+    } else {
+      return null;
+    }
+  }
+
+  // UPDATE
   Future<int> updateRedacteur(Redacteur redacteur) async {
     final db = await instance.database;
     return await db.update(
@@ -53,8 +74,15 @@ class DatabaseAdou {
     );
   }
 
+  // DELETE
   Future<int> deleteRedacteur(int id) async {
     final db = await instance.database;
     return await db.delete('redacteurs', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // CLOSE DATABASE
+  Future close() async {
+    final db = await instance.database;
+    db.close();
   }
 }
